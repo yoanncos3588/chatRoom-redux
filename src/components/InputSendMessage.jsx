@@ -3,7 +3,6 @@ import { addMessage } from "../store/chatroomReducer";
 import { useState } from "react";
 import { useDispatch } from "react-redux";
 
-
 const InputSendMessage = () => {
   const [message, setMessage] = useState("");
   const dispatch = useDispatch();

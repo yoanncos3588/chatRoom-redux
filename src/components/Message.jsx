@@ -1,4 +1,5 @@
 import { Message } from "semantic-ui-react";
+import PropTypes from "prop-types";
 
 const MessageItem = ({ user, message, date }) => {
   return (
@@ -12,6 +13,12 @@ const MessageItem = ({ user, message, date }) => {
       </Message>
     </>
   );
+};
+
+MessageItem.PropTypes = {
+  user: PropTypes.string,
+  message: PropTypes.string,
+  date: PropTypes.string,
 };
 
 export default MessageItem;
