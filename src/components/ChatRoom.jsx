@@ -1,11 +1,8 @@
 import MessageItem from "./Message";
-import { MessageListType } from "../interfaces";
-import { useAppSelector } from "../hooks/reduxHooks";
+import { useSelector } from "react-redux";
 
 const ChatRoom = () => {
-  const messages: MessageListType = useAppSelector(
-    (state) => state.chatroom.messages
-  );
+  const messages = useSelector((state) => state.chatroom.messages);
 
   return (
     <>

@@ -1,22 +1,22 @@
 import { Form } from "semantic-ui-react";
 import { addMessage } from "../store/chatroomReducer";
 import { useState } from "react";
-import { MessageInterface } from "../interfaces";
-import { useAppDispatch } from "../hooks/reduxHooks";
+import { useDispatch } from "react-redux";
+
 
 const InputSendMessage = () => {
-  const [message, setMessage] = useState<string>("");
-  const dispatch = useAppDispatch();
+  const [message, setMessage] = useState("");
+  const dispatch = useDispatch();
 
   /**
    * Handle : Envoie du message par l'user
    * @param {React.FormEvent<HTMLFormElement>} e
    */
-  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+  const handleSubmit = (e) => {
     e.preventDefault();
     // annule si message vide
     if (message !== "") {
-      const messageObj: MessageInterface = {
+      const messageObj = {
         user: "UserNameXX",
         message: message,
         date: new Date().toLocaleString() + "",
@@ -30,7 +30,7 @@ const InputSendMessage = () => {
    * Vide input message et vide state message
    */
   const clearInput = () => {
-    const input = document.getElementById("message") as HTMLInputElement | null;
+    const input = document.getElementById("message");
     if (input) {
       input.value = "";
       // important vide state

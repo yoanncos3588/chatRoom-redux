@@ -1,7 +1,6 @@
 import { Message } from "semantic-ui-react";
-import { MessageInterface } from "../interfaces";
 
-const MessageItem = ({ user, message, date }: MessageInterface) => {
+const MessageItem = ({ user, message, date }) => {
   return (
     <>
       <Message pointing="left" color="violet">
