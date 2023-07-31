@@ -8,7 +8,7 @@ const MessageItem = ({ user, message, date }: MessageInterface) => {
         <Message.Header>{message}</Message.Header>
         <br />
         <div>
-          <i>{user}</i> à {date}
+          <i>{user.pseudo}</i> à {date}
         </div>
       </Message>
     </>

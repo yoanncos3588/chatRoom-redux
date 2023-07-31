@@ -1,7 +1,7 @@
 export interface MessageInterface {
-  user: string;
   message: string;
-  date: string;
+  user: UserInterface;
+  date?: string;
 }
 
 export interface MessagesListInterface {
@@ -9,3 +9,8 @@ export interface MessagesListInterface {
 }
 
 export type MessageListType = Array<MessageInterface>;
+
+export interface UserInterface {
+  pseudo: string;
+  email: string;
+}

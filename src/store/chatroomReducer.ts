@@ -4,7 +4,7 @@ import { MessageInterface, MessagesListInterface } from "../interfaces";
 const initialState = {
   messages: [
     {
-      user: "Super Chat",
+      user: { pseudo: "Admin", email: "admin@admin.fr" },
       message: "initial message",
       date: new Date().toLocaleString() + "",
     },
@@ -17,7 +17,11 @@ const chatroomReducer = createReducer(initialState, (builder) => {
   builder.addCase(
     addMessage,
     (state, action: PayloadAction<MessageInterface>) => {
-      state.messages.push(action.payload);
+      state.messages.push({
+        user: action.payload.user,
+        message: action.payload.message,
+        date: new Date().toLocaleString() + "",
+      });
     }
   );
 });
