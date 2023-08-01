@@ -1,8 +1,7 @@
-import { Button, Divider, Form } from "semantic-ui-react";
+import { Button, Divider, Form, Message } from "semantic-ui-react";
 import { useAppDispatch, useAppSelector } from "../hooks/reduxHooks";
-import { saveUserInfos } from "../store/userReducer";
-import { useState } from "react";
-import { UserInterface } from "../interfaces";
+import { login } from "../store/userReducer";
+import { useEffect, useState } from "react";
 import React from "react";
 
 export interface LoginPropsInterface {
@@ -11,11 +10,23 @@ export interface LoginPropsInterface {
 
 const LoginForm = ({ setModalLoginOpen = undefined }: LoginPropsInterface) => {
   const [formHasError, setformHasError] = useState<boolean>(false);
+  const [firstTry, setFirstTry] = useState<boolean>(true);
 
   // recupère les infos de l'utilisateur ou celles par défaut
-  const [userInfos, setUserInfos] = useState<UserInterface>({
-    pseudo: useAppSelector((state) => state.user.pseudo),
-    email: useAppSelector((state) => state.user.email),
+  const [userInfos, setUserInfos] = useState({
+    email: "bouclierman@herocorp.io",
+    password: "jennifer",
+  });
+
+  const isLoggedIn = useAppSelector((state) => {
+    return state.user.isLoggedIn;
+  });
+
+  useEffect(() => {
+    // ferme la modal si user connecté
+    if (isLoggedIn && typeof setModalLoginOpen !== "undefined") {
+      setModalLoginOpen(false);
+    }
   });
 
   const dispatch = useAppDispatch();
@@ -26,12 +37,9 @@ const LoginForm = ({ setModalLoginOpen = undefined }: LoginPropsInterface) => {
    */
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault;
-    if (!formHasError) {
-      dispatch(saveUserInfos(userInfos));
-      // pour modal login
-      if (setModalLoginOpen !== undefined) {
-        setModalLoginOpen(false);
-      }
+    if (areFieldsOk()) {
+      dispatch(login(userInfos));
+      setFirstTry(false);
     }
   };
 
@@ -47,49 +55,30 @@ const LoginForm = ({ setModalLoginOpen = undefined }: LoginPropsInterface) => {
   };
 
   /**
-   * Validation d'un input
-   * @param {React.ChangeEvent<HTMLInputElement>} e
+   * Verifie si les inputs sont valides pour envoie API
+   * @returns {boolean}
    */
-  const validateField = (e: React.ChangeEvent<HTMLInputElement>) => {
-    if (e.target.value === "") {
+  const areFieldsOk = () => {
+    if (userInfos.email === "" || userInfos.password === "") {
       setformHasError(true);
+      return false;
     } else {
-      setformHasError(false);
+      return true;
     }
   };
 
   return (
-    <Form onSubmit={(e) => handleSubmit(e)}>
-      <Form.Field>
-        <label>Pseudo</label>
-        <Form.Input
-          error={
-            userInfos.pseudo === ""
-              ? { content: "Merci de remplir ce champ", pointing: "below" }
-              : null
-          }
-          placeholder="Mon pseudo !"
-          onChange={(e) => {
-            validateField(e);
-            setUserInfos((prev) => ({
-              ...prev,
-              pseudo: e.target.value,
-            }));
-          }}
-          value={userInfos.pseudo}
-        />
-      </Form.Field>
+    <Form onSubmit={(e) => handleSubmit(e)} error={!isLoggedIn}>
       <Form.Field>
         <label>Email</label>
         <Form.Input
           error={
-            userInfos.email === ""
+            userInfos.email === "" && formHasError
               ? { content: "Merci de remplir ce champ", pointing: "below" }
               : null
           }
           placeholder="mon@email.com"
           onChange={(e) => {
-            validateField(e);
             setUserInfos((prev) => ({
               ...prev,
               email: e.target.value,
@@ -98,6 +87,32 @@ const LoginForm = ({ setModalLoginOpen = undefined }: LoginPropsInterface) => {
           value={userInfos.email}
         />
       </Form.Field>
+      <Form.Field>
+        <label>Mot de passe</label>
+        <Form.Input
+          error={
+            userInfos.email === "" && formHasError
+              ? { content: "Merci de remplir ce champ", pointing: "below" }
+              : null
+          }
+          placeholder="******"
+          onChange={(e) => {
+            setUserInfos((prev) => ({
+              ...prev,
+              password: e.target.value,
+            }));
+          }}
+          value={userInfos.password}
+        />
+      </Form.Field>
+      {}
+      {!isLoggedIn && !firstTry && (
+        <Message
+          error
+          header="Erreur de connexion"
+          content="Nous n'avons pas réussi à vous identifier"
+        />
+      )}
       <Divider hidden />
       <Button positive type="submit" disabled={formHasError ? true : false}>
         Valider

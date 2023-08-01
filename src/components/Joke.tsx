@@ -5,10 +5,9 @@ import { getJoke } from "../store/jokeReducer";
 const Joke = () => {
   const dispatch = useAppDispatch();
 
-  const handleClick = async (e) => {
+  const handleClick = async (e: React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
     try {
-      console.log("handleclick");
       // enregistre une blague depuis API vers le store
       await dispatch(getJoke());
     } catch (rejectedValueOrSerializedError) {

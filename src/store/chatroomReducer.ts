@@ -4,7 +4,7 @@ import { MessageInterface, MessagesListInterface } from "../interfaces";
 const initialState = {
   messages: [
     {
-      user: { pseudo: "Admin", email: "admin@admin.fr" },
+      user: { pseudo: "Admin", color: "#a83289" },
       message: "initial message",
       date: new Date().toLocaleString() + "",
     },

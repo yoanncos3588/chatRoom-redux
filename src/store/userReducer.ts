@@ -1,21 +1,50 @@
-import { PayloadAction, createAction, createReducer } from "@reduxjs/toolkit";
-import { UserInterface } from "../interfaces";
+import { createAsyncThunk, createReducer } from "@reduxjs/toolkit";
+import { UserLoginAxiosResult, UserLoginPayloadInterface } from "../interfaces";
+import axios from "axios";
 
 const initialState = {
-  pseudo: "Anon",
-  email: "anon@email.com",
+  isLoggedIn: false,
+  pseudo: "Anonymous",
+  color: "#32a852",
 };
 
-export const saveUserInfos = createAction<UserInterface>("user/saveUserInfos");
+export const login = createAsyncThunk(
+  "user/login",
+  async (payload: UserLoginPayloadInterface) => {
+    const { email, password } = payload;
+    const { data } = await axios.post<UserLoginAxiosResult>(
+      "http://localhost:3001/login",
+      {
+        email,
+        password,
+      }
+    );
+    return data.pseudo;
+  }
+);
 
 const userReducer = createReducer(initialState, (builder) => {
-  builder.addCase(
-    saveUserInfos,
-    (state, action: PayloadAction<UserInterface>) => {
-      state.pseudo = action.payload.pseudo;
-      state.email = action.payload.email;
-    }
-  );
+  builder
+    .addCase(login.fulfilled, (state, action) => {
+      console.log(action.payload);
+      state.pseudo = action.payload;
+      state.isLoggedIn = true;
+    })
+    .addCase(login.rejected, (state) => {
+      state.isLoggedIn = false;
+    });
 });
+
+// export const saveUserInfos = createAction<UserInterface>("user/saveUserInfos");
+
+// const userReducer = createReducer(initialState, (builder) => {
+//   builder.addCase(
+//     saveUserInfos,
+//     (state, action: PayloadAction<UserInterface>) => {
+//       state.pseudo = action.payload.pseudo;
+//       state.email = action.payload.email;
+//     }
+//   );
+// });
 
 export default userReducer;
