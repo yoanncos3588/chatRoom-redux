@@ -17,6 +17,7 @@ const LoginForm = ({ setModalLoginOpen = undefined }: LoginPropsInterface) => {
     pseudo: useAppSelector((state) => state.user.pseudo),
     email: useAppSelector((state) => state.user.email),
   });
+
   const dispatch = useAppDispatch();
 
   /**

@@ -1,13 +1,19 @@
 import { Form } from "semantic-ui-react";
 import { addMessage } from "../store/chatroomReducer";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useAppDispatch, useAppSelector } from "../hooks/reduxHooks";
 import { UserInterface } from "../interfaces";
 
 const InputSendMessage = () => {
   const user = useAppSelector<UserInterface>((state) => state.user);
+  const joke = useAppSelector((state) => state.joke.content);
   const [message, setMessage] = useState<string>("");
   const dispatch = useAppDispatch();
+
+  /** Si une blague est chargée dans le store on l'affiche dans l'input */
+  useEffect(() => {
+    setMessage(joke);
+  }, [joke]);
 
   /**
    * Handle : Envoie du message par l'user
@@ -47,6 +53,7 @@ const InputSendMessage = () => {
             onChange={(e) => {
               setMessage(e.target.value);
             }}
+            value={message}
           />
         </Form.Group>
       </Form.Field>

@@ -14,3 +14,10 @@ export interface UserInterface {
   pseudo: string;
   email: string;
 }
+
+export interface JokeInterface {
+  icon_url: string;
+  id: string;
+  url: string;
+  value: string;
+}

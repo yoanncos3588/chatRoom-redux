@@ -1,11 +1,13 @@
 import { configureStore } from "@reduxjs/toolkit";
 import chatroomReducer from "./chatroomReducer";
 import userReducer from "./userReducer";
+import jokeReducer from "./jokeReducer";
 
 const store = configureStore({
   reducer: {
     chatroom: chatroomReducer,
     user: userReducer,
+    joke: jokeReducer,
   },
 });
 
